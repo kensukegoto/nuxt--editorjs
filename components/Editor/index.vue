@@ -19,14 +19,13 @@ export default {
     const EditorJS = require('@editorjs/editorjs');
     const Header = require('@editorjs/header');
     const paragraphBg = require("./paragraphBg");
+    const ImageTool = require("./Image");
 
     this.editor = new EditorJS({
       handler: "editorjs",
       tools: {
-        paragraphBg : {
-          class: paragraphBg,
-          inlineToolbar: true
-        }
+        paragraphBg,
+        ImageTool: ImageTool(this)
       },
       data: {
         time: 1552744582955,

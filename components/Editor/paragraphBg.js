@@ -45,4 +45,7 @@ class paragraphBg {
   }
 }
 
-module.exports = paragraphBg
+module.exports = {
+  class: paragraphBg,
+  inlineToolbar: true
+}
