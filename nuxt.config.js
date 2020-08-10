@@ -24,11 +24,18 @@ export default {
   ** Global CSS
   */
   css: [
+    '@fortawesome/fontawesome-free-webfonts',
+    '@fortawesome/fontawesome-free-webfonts/css/fa-brands.css',
+    '@fortawesome/fontawesome-free-webfonts/css/fa-regular.css',
+    '@fortawesome/fontawesome-free-webfonts/css/fa-solid.css',
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    // {
+    //   src: "~/plugins/Editor",mode: "client"
+    // }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -39,7 +46,8 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    'nuxt-fontawesome',
   ],
   /*
   ** Build configuration
