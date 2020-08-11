@@ -1,7 +1,12 @@
 const express = require("express");
 const multer = require("multer");
+const bodyParser = require("body-parser");
+const fs = require('fs');
 
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   // ファイルの保存先を指定(今回はsrc/public/image以下に画像を保存)
@@ -41,6 +46,12 @@ app.post('/image', (req, res) => {
           })
       }
   })
+});
+
+app.get("/article",(req,res) => {
+  const jsonObject = JSON.parse(fs.readFileSync('./api/articles.json', 'utf8'));
+  res.json(jsonObject);
+
 });
 
 
