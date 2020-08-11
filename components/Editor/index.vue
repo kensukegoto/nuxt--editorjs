@@ -11,7 +11,7 @@ export default {
   data: () => {
     return {
       editor: {},
-      article: {},
+      // article: {},
     }
   },
   mounted(){
@@ -29,14 +29,7 @@ export default {
       },
       data: {
         time: 1552744582955,
-        blocks: [
-          {
-            type: "paragraphBg",
-            data: {
-              text: "低金利で、利息が雀の涙ほどしかつかないだけに、この手数料は何とかならないものかと思ってしまいます。"
-            }
-          }
-        ],
+        blocks: this.article.body,
         version: "2.11.10"
       }
 
@@ -46,9 +39,34 @@ export default {
   },
   methods: {
     save() {
+      const id = this.article.id;
+      const all = this.all;
+
       this.editor.save().then( data => {
-        console.log(data);
+
+        let updateAll = {...all};
+        updateAll.channel.item = all.channel.item.map( item => {
+          if(+item.id === id) {
+            console.log(data)
+            item = {...item,body:data.blocks}
+          }
+          return item;
+        });
+
+        this.$axios.$post("/api/article",updateAll)
+          .then(res => {
+            console.log(res)
+          })
       })
+
+    }
+  },
+  props: {
+    all: {
+      required: true
+    },
+    article: {
+      required: true
     }
   }
 }

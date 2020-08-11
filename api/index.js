@@ -51,7 +51,12 @@ app.post('/image', (req, res) => {
 app.get("/article",(req,res) => {
   const jsonObject = JSON.parse(fs.readFileSync('./api/articles.json', 'utf8'));
   res.json(jsonObject);
-
+});
+app.post("/article",(req,res) => {
+  fs.writeFileSync('./api/articles.json', JSON.stringify(req.body));
+  res.json({
+    message: "ok"
+  });
 });
 
 

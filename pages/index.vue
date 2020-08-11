@@ -4,7 +4,7 @@
       <div>記事作成</div>
       <div >
         <client-only placeholder="loading">
-          <Editor />
+          <!-- <Editor /> -->
         </client-only>
         <!-- <div id="editorjs"/> -->
       </div>
