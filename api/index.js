@@ -15,9 +15,9 @@ const storage = multer.diskStorage({
   },
   // ファイル名を指定(オリジナルのファイル名を指定)
   filename: function (req, file, cb) {
+
       //　Math.random().toString(36).slice(-9)で乱数を生成
-      const imageName = `${Math.random().toString(36).slice(-9)}_${Date.now()}.jpg`;
-      console.log(imageName);
+      const imageName = `image/${Math.random().toString(36).slice(-9)}_${Date.now()}.jpg`;
       cb(null, imageName)
   }
 })
@@ -28,7 +28,6 @@ const upload = multer({
 
 
 app.post('/image', (req, res) => {
-  
   upload(req, res, (err) => {
       if (err) {
         console.log(err)

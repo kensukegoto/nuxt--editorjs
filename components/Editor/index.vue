@@ -24,6 +24,7 @@ export default {
     this.editor = new EditorJS({
       handler: "editorjs",
       tools: {
+        Header,
         paragraphBg,
         ImageTool: ImageTool(this)
       },

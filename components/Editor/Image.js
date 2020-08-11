@@ -9,6 +9,7 @@ module.exports = (context) => {
         uploadByFile(file) {
           let formData = new FormData()
           formData.append('file', file)
+          formData.append("idididid",context.article.id)
           let config = {headers: {'content-type': 'multipart/form-data'}}
           return context.$axios.post('/api/image', formData, config)
             .then(res => {
