@@ -16,12 +16,15 @@
           <div v-if="item.type === 'h2'" class="item__body">
             <div contenteditable="true"><p>{{ item.content }}</p></div>
           </div>
-          <div v-if="item.type === 'image'" class="item__body">
-            <figure v-if="item.content !== ''" class="item__body__image">
+          <div v-if="item.type === 'image'" class="item__body item__body--image">
+            <figure>
               <img :src="item.content" alt="">
             </figure>
-            <div v-else>
-              <p><input type="file" name="" @change="addPreview"></p>
+            <div class="upload">
+              <p>
+                <input type="file" :data-index="index" :name="'image_' + index" @change="addPreview">
+                <span>ファイルを選択して下さい</span>
+              </p>
             </div>
           </div>
         </li>
@@ -61,7 +64,7 @@ export default {
       list: [
         { type: "h2",content: "def" },
         { type: "p",content: "abc" },
-        { type: "image",content: "/image/nyanco_01.jpg"}
+        { type: "image",content: "/image/nyanco_01.jpg" }
       ],
       selectedType: ''
     }
@@ -76,7 +79,15 @@ export default {
   methods:{
     doAdd(){
       const type = this.selectedType || "p";
-      this.list.push({ type,name: type2name.get(type), content:"" })
+      let item;
+      switch(type){
+        case "image":
+          item = { type,name: type2name.get(type), content:"/image/noimage.png" };
+          break;
+        default:
+          item = { type,name: type2name.get(type), content:"" };
+      }
+      this.list.push(item)
     },
     doDelete(index){
       this.list.splice(index, 1);
@@ -93,7 +104,12 @@ export default {
     },
     addPreview(e){
       let files = e.target.files || e.dataTransfer.files;
-      // this.createImage(files[0]);
+      const index = e.target.dataset["index"];
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.list[index].content = e.target.result;
+      };
+      reader.readAsDataURL(files[0]);
     }
   }
 }
@@ -140,11 +156,40 @@ export default {
         outline: none;
       }
     }
-    &__image{
-      
-      width: 50%;
-      img{
-        max-width: 100%;
+    &--image{
+      display: flex;
+      flex-wrap: wrap;
+      figure{
+        width: 50%;
+        img{
+          max-width: 100%;
+        }
+      }
+      .upload {
+        width: 50%;
+        p{
+          position: relative;
+          height: 100px;
+          background: #efefef;
+          border-radius: 15px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          input{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            &:focus{
+              outline: none;
+            }
+          }
+        }
+        
+
+
       }
     }
   }

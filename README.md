@@ -15,6 +15,8 @@ https://github.com/kensukegoto/multer--check-file-ext
 追加：テキストと中見出しを選択して追加出来る
 
 変更：inputをeditable要素に変更
+追加：固定の画像を表示する
+追加：画像をプレビュー出来る
 
 
 
