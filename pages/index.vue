@@ -6,10 +6,14 @@
         :key="index" 
         class="editor__item item">
           <div class="item__header">
+            <p class="item__header__title">{{ item.name }}</p>
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
-          <div class="item__body">
+          <div v-if="item.type === 'p'" class="item__body">
             <textarea name="" id="" v-model="item.content"></textarea>
+          </div>
+          <div v-if="item.type === 'h2'" class="item__body">
+            <input type="text" name="" id="" v-model="item.content" />
           </div>
         </li>
       </draggable>
@@ -39,8 +43,8 @@ export default {
   data(){
     return {
       list: [
-        { content: "abc" },
-        { content: "def" }
+        { type: "p",name: "テキスト",content: "abc" },
+        { type: "h2",name:"中見出し",content: "def" }
       ],
       selectedType: ''
     }
@@ -48,7 +52,7 @@ export default {
   methods:{
     doAdd(){
       const type = this.selectedType || "p";
-      this.list.push({ content:"" })
+      this.list.push({ type,content:"" })
     },
     doDelete(index){
       this.list.splice(index, 1);
@@ -83,16 +87,22 @@ export default {
     &__header{
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-between;
       height: 32px;
       background: #88684e;
+      color: #fff;
       padding: 0 16px;
+      font-weight: bold;
       a{
         display: block;
         font-size: 24px;
         cursor: pointer;
-        color: #fff;
+        
       }
+    }
+    &__body{
+      background: #fff;
+      padding: 8px;
     }
   }
 
@@ -100,6 +110,16 @@ export default {
     width: 100%;
     min-height: 200px;
     border: none;
+    &:focus{
+      outline: none;
+    }
+  }
+  input{
+    border:none;
+    width: 100%;
+    &:focus{
+      outline: none;
+    }
   }
 
 }
