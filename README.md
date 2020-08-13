@@ -6,6 +6,10 @@ https://github.com/kensukegoto/multer--check-file-ext
 # git
 
 ```
+# 8/13
+追加：ドラッグドロップで入れ替えられる
+
+
 # 次の課題(8/11)
 ・新規追加
 ・一覧の作成

@@ -26,4 +26,7 @@ html {
 body{
   background-color: #e0dacb;
 }
+ul,li{
+  list-style: none;
+}
 </style>

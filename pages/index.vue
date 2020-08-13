@@ -1,26 +1,34 @@
 <template>
   <section class="editor">
-    <div class="editor__item item">
-      <div class="item__header">
-        <p>×</p>
-      </div>
-      <div class="item__body">
-        <textarea name="" id=""></textarea>
-      </div>
-    </div>
-    <div class="editor__item">
-      <div class="item__header">
-        <p>×</p>
-      </div>
-      <div class="item__body">
-        <textarea name="" id=""></textarea>
-      </div>
-    </div>
+      <draggable tag="ul" ghost-class="ghost">
+        <li v-for="(item, index) of list" :key="index" class="editor__item item">
+          <div class="item__header">
+            <p>×</p>
+          </div>
+          <div class="item__body">
+            <textarea name="" id="" v-model="item.content"></textarea>
+          </div>
+        </li>
+      </draggable>
   </section>
 </template>
 
 <script>
-
+import draggable from 'vuedraggable'
+export default {
+  components:{
+    draggable
+  },
+  data(){
+    return {
+      list: [
+        { content: "abc" },
+        { content: "def" },
+        { content: "ghi" },
+      ]
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -35,6 +43,7 @@
   }
 
   .item{
+
     &__header{
       display: flex;
       align-items: center;
@@ -51,5 +60,9 @@
     min-height: 200px;
     border: none;
   }
+}
+
+.ghost {
+  opacity: 0.5;
 }
 </style>
