@@ -1,6 +1,6 @@
 <template>
   <section class="editor">
-      <draggable tag="ul" ghost-class="ghost" :list="list">
+      <draggable tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
         class="editor__item item">
@@ -46,6 +46,10 @@ export default {
 
   .item{
 
+    &--draged{
+      opacity: 0.5;
+    }
+
     &__header{
       display: flex;
       align-items: center;
@@ -64,7 +68,9 @@ export default {
   }
 }
 
-.ghost {
-  opacity: 0.5;
+
+
+.add {
+
 }
 </style>
