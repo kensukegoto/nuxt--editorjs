@@ -5,7 +5,7 @@
         :key="index" 
         class="editor__item item">
           <div class="item__header">
-            <p>×</p>
+            <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div class="item__body">
             <textarea name="" id="" v-model="item.content"></textarea>
@@ -45,6 +45,9 @@ export default {
       const type = this.selectedType || "p";
       this.list.push({ content:"" })
     },
+    doDelete: function(index){
+      this.list.splice(index, 1);
+    },
   }
 }
 </script>
@@ -72,8 +75,12 @@ export default {
       justify-content: flex-end;
       height: 32px;
       background: #88684e;
-      p{
-        margin-right: 24px;
+      padding: 0 16px;
+      a{
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        color: #fff;
       }
     }
   }
