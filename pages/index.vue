@@ -75,7 +75,6 @@ export default {
 
   &__item{
     margin-top: 24px;
-    padding-top: 32px;
   }
 
   .item{
@@ -88,14 +87,14 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 32px;
+      height: 24px;
       background: #88684e;
       color: #fff;
       padding: 0 16px;
       font-weight: bold;
       a{
         display: block;
-        font-size: 24px;
+        font-size: 20px;
         cursor: pointer;
         
       }
@@ -107,6 +106,7 @@ export default {
   }
 
   textarea{
+    font-size: 16px;
     width: 100%;
     min-height: 200px;
     border: none;
@@ -115,6 +115,7 @@ export default {
     }
   }
   input{
+    font-size: 16px;
     border:none;
     width: 100%;
     &:focus{
