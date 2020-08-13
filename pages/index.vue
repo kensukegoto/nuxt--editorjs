@@ -7,7 +7,7 @@
         :key="index" 
         class="editor__item item">
           <div class="item__header">
-            <p class="item__header__title">{{ item.name }}</p>
+            <p class="item__header__title">{{ typename(item.type) }}</p>
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div v-if="item.type === 'p'" class="item__body">
@@ -15,6 +15,14 @@
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
             <div contenteditable="true"><p>{{ item.content }}</p></div>
+          </div>
+          <div v-if="item.type === 'image'" class="item__body">
+            <figure v-if="item.content !== ''" class="item__body__image">
+              <img :src="item.content" alt="">
+            </figure>
+            <div v-else>
+              <p><input type="file" name="" @change="addPreview"></p>
+            </div>
           </div>
         </li>
       </draggable>
@@ -25,6 +33,7 @@
             <option disabled value="">追加する要素を選択して下さい</option>
             <option value="p">テキスト</option>
             <option value="h2">中見出し</option>
+            <option value="image">画像</option>
           </select>
         </p>
         <a @click="doAdd"><p>+</p></a>
@@ -33,13 +42,16 @@
         <a @click="doSave"><p>保存</p></a>
       </div>
     </form>
-  
-      
   </section>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
+const type2name = new Map([
+  ["h2","中見出し"],
+  ["p","テキスト"],
+  ["image","画像"],
+])
 export default {
   components:{
     draggable
@@ -47,16 +59,24 @@ export default {
   data(){
     return {
       list: [
-        { type: "p",name: "テキスト",content: "abc" },
-        { type: "h2",name:"中見出し",content: "def" }
+        { type: "h2",content: "def" },
+        { type: "p",content: "abc" },
+        { type: "image",content: "/image/nyanco_01.jpg"}
       ],
       selectedType: ''
+    }
+  },
+  computed:{
+    typename:()=>{
+      return (type)=>{
+        return type2name.get(type);
+      }
     }
   },
   methods:{
     doAdd(){
       const type = this.selectedType || "p";
-      this.list.push({ type,content:"" })
+      this.list.push({ type,name: type2name.get(type), content:"" })
     },
     doDelete(index){
       this.list.splice(index, 1);
@@ -70,6 +90,10 @@ export default {
     doBold(cmdId, param){
       // 文字選択がdraggableのイベントで置き換わってるっぽい
       document.execCommand('bold', false, param);
+    },
+    addPreview(e){
+      let files = e.target.files || e.dataTransfer.files;
+      // this.createImage(files[0]);
     }
   }
 }
@@ -84,42 +108,49 @@ export default {
   &__item{
     margin-top: 24px;
   }
+}
 
-  .item{
+.item{
 
-    &--draged{
-      opacity: 0.5;
+  &--draged{
+    opacity: 0.5;
+  }
+
+  &__header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    background: #88684e;
+    color: #fff;
+    padding: 0 16px;
+    font-weight: bold;
+    a{
+      display: block;
+      font-size: 20px;
+      cursor: pointer;
+      
     }
-
-    &__header{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 24px;
-      background: #88684e;
-      color: #fff;
-      padding: 0 16px;
-      font-weight: bold;
-      a{
-        display: block;
-        font-size: 20px;
-        cursor: pointer;
-        
+  }
+  &__body{
+    background: #fff;
+    padding: 8px;
+    div,p{
+      &:focus{
+        outline: none;
       }
     }
-    &__body{
-      background: #fff;
-      padding: 8px;
-      div,p{
-        &:focus{
-          outline: none;
-        }
+    &__image{
+      
+      width: 50%;
+      img{
+        max-width: 100%;
       }
     }
   }
-
-
 }
+
+
 
 
 .add {
