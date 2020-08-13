@@ -1,5 +1,6 @@
 <template>
   <section class="editor">
+    <form @submit.prevent="doSave">
       <draggable tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
@@ -22,6 +23,10 @@
         </p>
         <a @click="doAdd"><p>+</p></a>
       </div>
+      <div class="save">
+        <a @click="doSave"><p>保存</p></a>
+      </div>
+    </form>
   </section>
 </template>
 
@@ -45,9 +50,15 @@ export default {
       const type = this.selectedType || "p";
       this.list.push({ content:"" })
     },
-    doDelete: function(index){
+    doDelete(index){
       this.list.splice(index, 1);
     },
+    doSave(){
+      console.log(this.list);
+    },
+    doSend(){
+      console.log("送るかも");
+    }
   }
 }
 </script>
@@ -97,12 +108,9 @@ export default {
 .add {
 
   margin-top: 24px;
-  padding-top: 8px;
-  padding-bottom: 8px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 8px;
 
   select{
     width: 400px;
@@ -121,4 +129,20 @@ export default {
     }
   }
 }
+.save{
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  a {
+    cursor: pointer;
+    display: inline-block;
+    padding: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #fff;
+    border: 1px solid #88684e;
+  }
+}
+
 </style>
