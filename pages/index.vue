@@ -14,11 +14,13 @@
       </draggable>
       <div class="add">
         <p>
-          <select name="" id="">
-            <option hidden>選択してください</option>
+          <select id="add__select" v-model="selectedType">
+            <option disabled value="">追加する要素を選択して下さい</option>
+            <option value="p">テキスト</option>
+            <option value="h2">中見出し</option>
           </select>
         </p>
-        <a><p>+</p></a>
+        <a @click="doAdd"><p>+</p></a>
       </div>
   </section>
 </template>
@@ -34,8 +36,15 @@ export default {
       list: [
         { content: "abc" },
         { content: "def" }
-      ]
+      ],
+      selectedType: ''
     }
+  },
+  methods:{
+    doAdd(){
+      const type = this.selectedType || "p";
+      this.list.push({ content:"" })
+    },
   }
 }
 </script>
@@ -76,7 +85,6 @@ export default {
   }
 
 }
-
 
 
 .add {
