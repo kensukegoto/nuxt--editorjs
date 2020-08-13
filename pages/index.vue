@@ -12,6 +12,14 @@
           </div>
         </li>
       </draggable>
+      <div class="add">
+        <p>
+          <select name="" id="">
+            <option hidden>選択してください</option>
+          </select>
+        </p>
+        <a><p>+</p></a>
+      </div>
   </section>
 </template>
 
@@ -25,8 +33,7 @@ export default {
     return {
       list: [
         { content: "abc" },
-        { content: "def" },
-        { content: "ghi" },
+        { content: "def" }
       ]
     }
   }
@@ -61,16 +68,42 @@ export default {
       }
     }
   }
+
   textarea{
     width: 100%;
     min-height: 200px;
     border: none;
   }
+
 }
 
 
 
 .add {
 
+  margin-top: 24px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+
+  select{
+    width: 400px;
+    height: 32px;
+  }
+  a{
+    display: inline-block;
+    p{
+      height: 32px;
+      width: 32px;
+      text-align: center;
+      font-size: 24px;
+      background: #88684e;
+      color: #fff;
+      // border-radius: 50%;
+    }
+  }
 }
 </style>
