@@ -8,6 +8,7 @@ https://github.com/kensukegoto/multer--check-file-ext
 ```
 # 8/13
 追加：ドラッグドロップで入れ替えられる
+追加：入れ替え後の順序を保存する
 
 
 # 次の課題(8/11)

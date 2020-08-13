@@ -1,7 +1,9 @@
 <template>
   <section class="editor">
-      <draggable tag="ul" ghost-class="ghost">
-        <li v-for="(item, index) of list" :key="index" class="editor__item item">
+      <draggable tag="ul" ghost-class="ghost" :list="list">
+        <li v-for="(item, index) of list" 
+        :key="index" 
+        class="editor__item item">
           <div class="item__header">
             <p>×</p>
           </div>
@@ -27,7 +29,7 @@ export default {
         { content: "ghi" },
       ]
     }
-  },
+  }
 }
 </script>
 
