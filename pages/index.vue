@@ -1,6 +1,7 @@
 <template>
   <section class="editor">
     <form @submit.prevent="doSave">
+
       <draggable tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
@@ -10,13 +11,14 @@
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div v-if="item.type === 'p'" class="item__body">
-            <textarea name="" id="" v-model="item.content"></textarea>
+            <div contenteditable="true"><p>{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
-            <input type="text" name="" id="" v-model="item.content" />
+            <div contenteditable="true"><p>{{ item.content }}</p></div>
           </div>
         </li>
       </draggable>
+      
       <div class="add">
         <p>
           <select id="add__select" v-model="selectedType">
@@ -31,6 +33,8 @@
         <a @click="doSave"><p>保存</p></a>
       </div>
     </form>
+  
+      
   </section>
 </template>
 
@@ -62,6 +66,10 @@ export default {
     },
     doSend(){
       console.log("送るかも");
+    },
+    doBold(cmdId, param){
+      // 文字選択がdraggableのイベントで置き換わってるっぽい
+      document.execCommand('bold', false, param);
     }
   }
 }
@@ -102,26 +110,14 @@ export default {
     &__body{
       background: #fff;
       padding: 8px;
+      div,p{
+        &:focus{
+          outline: none;
+        }
+      }
     }
   }
 
-  textarea{
-    font-size: 16px;
-    width: 100%;
-    min-height: 200px;
-    border: none;
-    &:focus{
-      outline: none;
-    }
-  }
-  input{
-    font-size: 16px;
-    border:none;
-    width: 100%;
-    &:focus{
-      outline: none;
-    }
-  }
 
 }
 

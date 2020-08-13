@@ -14,6 +14,9 @@ https://github.com/kensukegoto/multer--check-file-ext
 追加：保存ボタンで現在のフォームの中身を確認出来る
 追加：テキストと中見出しを選択して追加出来る
 
+変更：inputをeditable要素に変更
+
+
 
 # 次の課題(8/11)
 ・新規追加
