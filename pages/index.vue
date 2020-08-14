@@ -11,10 +11,10 @@
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div v-if="item.type === 'p'" class="item__body">
-            <div contenteditable="true"><p>{{ item.content }}</p></div>
+            <div><p contenteditable="true" @input="doUpdate">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
-            <div contenteditable="true"><p>{{ item.content }}</p></div>
+            <div><p contenteditable="true" @input="doUpdate">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'image'" class="item__body item__body--image">
             <figure>
@@ -77,6 +77,9 @@ export default {
     }
   },
   methods:{
+    doUpdate(e){
+      console.log(e.target)
+    },
     doAdd(){
       const type = this.selectedType || "p";
       let item;
@@ -93,12 +96,13 @@ export default {
       this.list.splice(index, 1);
     },
     doSave(){
-
+      console.log(this.list)
+      return;
       const formData = [...this.list].reduce((acc,item,index) => {
         if(item.type !== "image"){
-          acc.append(`filed_${index}`,item.content)
+          acc.append(`${item.type}`,item.content)
         } else {
-          acc.append(`image_${index}`,"")
+          acc.append(`${item.type}`,"")
           acc.append("files",item.file)
         }
         return acc;
@@ -170,6 +174,9 @@ export default {
   &__body{
     background: #fff;
     padding: 8px;
+    p{
+      min-height: 1em;
+    }
     div,p{
       &:focus{
         outline: none;

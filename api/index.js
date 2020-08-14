@@ -53,6 +53,7 @@ app.post('/create', (req, res) => {
       } else {
           //アップロード成功した場合
           let body = res.req.body;
+          console.log(body)
           for(let i = 0,l = res.req.files.length;i < l;i++){
             const name = res.req.files[i].filename;
             body = Object.keys(body).map( key => {
