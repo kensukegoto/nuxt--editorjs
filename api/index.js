@@ -1,12 +1,12 @@
 const express = require("express");
 const multer = require("multer");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const fs = require('fs');
 
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   // ファイルの保存先を指定(今回はsrc/public/image以下に画像を保存)
@@ -27,7 +27,17 @@ const upload = multer({
 }).single('file')
 
 
+app.post("/create",multer().none(),(req,res) => {
+  let result = {};
+  Object.keys(req.body).forEach(e => {
+    result[e] = req.body[e];
+  })
+  
+  return res.json(result)
+
+})
 app.post('/image', (req, res) => {
+  // 引数はコールバック
   upload(req, res, (err) => {
       if (err) {
         console.log(err)

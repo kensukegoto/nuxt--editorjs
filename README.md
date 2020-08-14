@@ -18,6 +18,8 @@ https://github.com/kensukegoto/multer--check-file-ext
 追加：固定の画像を表示する
 追加：画像をプレビュー出来る
 
+追加：テキストのみフォームで送り結果として同じ配列が返る
+
 
 
 # 次の課題(8/11)

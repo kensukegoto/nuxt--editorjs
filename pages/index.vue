@@ -64,7 +64,7 @@ export default {
       list: [
         { type: "h2",content: "def" },
         { type: "p",content: "abc" },
-        { type: "image",content: "/image/nyanco_01.jpg" }
+        // { type: "image",content: "/image/nyanco_01.jpg" }
       ],
       selectedType: ''
     }
@@ -93,7 +93,20 @@ export default {
       this.list.splice(index, 1);
     },
     doSave(){
-      console.log(this.list);
+
+      const formData = [...this.list].reduce((acc,item,index) => {
+        acc.append(`f_${index}`,item.content)
+        return acc;
+      },new FormData());
+
+      const config = {headers: {'content-type': 'multipart/form-data'}}
+
+      this.$axios.$post("/api/create",formData,config)
+        .then(res => {
+          console.log(res)
+        })
+
+
     },
     doSend(){
       console.log("送るかも");
