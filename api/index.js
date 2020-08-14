@@ -27,18 +27,6 @@ const upload = multer({
 }).array('files')
 
 
-// app.post("/create",
-// multer().none(),
-// (req,res,cb) => {
-//   console.log(req)
-
-//   cb()
-// },
-// (req,res) => {
-//   console.log("来る？")
-//   return res.json({ status: 200 })
-
-// })
 app.post('/create', (req, res) => {
   // 引数はコールバック
   upload(req, res, (err) => {
@@ -51,18 +39,30 @@ app.post('/create', (req, res) => {
               error: "fail to uplord image"
           })
       } else {
+
+        // {
+        //   "type":"h1",
+        //   "data":{
+        //     "text":"野十郎さんのお食事事情 1"
+        //   }
+        // },
+        // {
+        //   "type":"mv",
+        //   "data":{
+        //     "text":"/image/nyanco_01.jpg"
+        //   }
+        // },
           //アップロード成功した場合
           let body = res.req.body;
-          console.log(body)
+          body = Object.keys(body).map(k => {
+            const tag = k.split("_")[0]
+            return { type : tag, content : body[k]}
+          })
+          
           for(let i = 0,l = res.req.files.length;i < l;i++){
             const name = res.req.files[i].filename;
-            body = Object.keys(body).map( key => {
-              let item = {};
-              if(key.startsWith("image")) {
-                item[key] = name;
-              } else {
-                item[key] = body[key]
-              }
+            body = body.map( item => {
+              if(item.type.startsWith("image")) item.content = name;
               return item;
             })
           }
@@ -71,7 +71,6 @@ app.post('/create', (req, res) => {
               status: "sucess",
               // ファイル名を返す
               body: body
-              // path: res.req.file.filename
           })
       }
   })

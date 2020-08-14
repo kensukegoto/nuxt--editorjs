@@ -8,6 +8,7 @@ https://github.com/kensukegoto/multer--check-file-ext
 ```
 # 8/14
 追加：画像を送信すると保存先のURLが返る
+追加：画像含めてフォームを処理し記事要素の配列を返す
 
 # 8/13
 追加：ドラッグドロップで入れ替えられる

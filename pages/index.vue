@@ -96,13 +96,12 @@ export default {
       this.list.splice(index, 1);
     },
     doSave(){
-      console.log(this.list)
-      return;
+
       const formData = [...this.list].reduce((acc,item,index) => {
         if(item.type !== "image"){
-          acc.append(`${item.type}`,item.content)
+          acc.append(`${item.type}_${index}`,item.content)
         } else {
-          acc.append(`${item.type}`,"")
+          acc.append(`${item.type}_${index}`,"")
           acc.append("files",item.file)
         }
         return acc;
