@@ -6,6 +6,9 @@ https://github.com/kensukegoto/multer--check-file-ext
 # git
 
 ```
+# 8/14
+追加：画像を送信すると保存先のURLが返る
+
 # 8/13
 追加：ドラッグドロップで入れ替えられる
 追加：入れ替え後の順序を保存する
@@ -19,6 +22,8 @@ https://github.com/kensukegoto/multer--check-file-ext
 追加：画像をプレビュー出来る
 
 追加：テキストのみフォームで送り結果として同じ配列が返る
+追加：画像を受け取り保存する
+追加：画像のURLを返す
 
 
 

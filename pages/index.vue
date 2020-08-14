@@ -82,7 +82,7 @@ export default {
       let item;
       switch(type){
         case "image":
-          item = { type,name: type2name.get(type), content:"/image/noimage.png" };
+          item = { type,name: type2name.get(type), content:"/image/noimage.png" ,file:""};
           break;
         default:
           item = { type,name: type2name.get(type), content:"" };
@@ -95,7 +95,12 @@ export default {
     doSave(){
 
       const formData = [...this.list].reduce((acc,item,index) => {
-        acc.append(`f_${index}`,item.content)
+        if(item.type !== "image"){
+          acc.append(`filed_${index}`,item.content)
+        } else {
+          acc.append(`image_${index}`,"")
+          acc.append("files",item.file)
+        }
         return acc;
       },new FormData());
 
@@ -123,6 +128,7 @@ export default {
         this.list[index].content = e.target.result;
       };
       reader.readAsDataURL(files[0]);
+      this.list[index].file = files[0]
     }
   }
 }

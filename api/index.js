@@ -24,21 +24,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage
-}).single('file')
+}).array('files')
 
 
-app.post("/create",multer().none(),(req,res) => {
-  let result = {};
-  Object.keys(req.body).forEach(e => {
-    result[e] = req.body[e];
-  })
-  
-  return res.json(result)
+// app.post("/create",
+// multer().none(),
+// (req,res,cb) => {
+//   console.log(req)
 
-})
-app.post('/image', (req, res) => {
+//   cb()
+// },
+// (req,res) => {
+//   console.log("来る？")
+//   return res.json({ status: 200 })
+
+// })
+app.post('/create', (req, res) => {
   // 引数はコールバック
   upload(req, res, (err) => {
+
       if (err) {
         console.log(err)
           //アップロード失敗した場合
@@ -48,10 +52,25 @@ app.post('/image', (req, res) => {
           })
       } else {
           //アップロード成功した場合
+          let body = res.req.body;
+          for(let i = 0,l = res.req.files.length;i < l;i++){
+            const name = res.req.files[i].filename;
+            body = Object.keys(body).map( key => {
+              let item = {};
+              if(key.startsWith("image")) {
+                item[key] = name;
+              } else {
+                item[key] = body[key]
+              }
+              return item;
+            })
+          }
+
           res.json({
               status: "sucess",
               // ファイル名を返す
-              path: res.req.file.filename
+              body: body
+              // path: res.req.file.filename
           })
       }
   })
