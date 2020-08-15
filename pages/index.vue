@@ -1,7 +1,19 @@
 <template>
   <section class="editor">
     <form @submit.prevent="doSave">
-
+      <div class="item">
+        <div class="item__header">
+          <p class="item__header__title">記事タイトル</p>
+        </div>
+        <div class="item__body">
+          <p class="item__body__title">タイトル</p>
+          <div><p contenteditable="true" @input="e => {doUpdate(e,'title',true)}" @paste="onPaste">{{ meta.title.content }}</p></div>
+        </div>
+        <div class="item__body">
+          <p class="item__body__title">ディスクリプション</p>
+          <div><p contenteditable="true" @input="e => {doUpdate(e,'description',true)}" @paste="onPaste">{{ meta.description.content }}</p></div>
+        </div>
+      </div>
       <draggable tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
@@ -61,6 +73,16 @@ export default {
   },
   data(){
     return {
+      meta: {
+        title : {
+          content: "終戦から75年 全国戦没者追悼式 約310万人の戦没者を慰霊",
+          updated: ""
+        },
+        description: {
+          content: "【NHK】終戦から75年を迎えた15日、およそ310万人の戦没者を慰霊する政府主催の全国戦没者追悼式が東京の日本武道館で行われてい…",
+          updated: ""
+        }
+      },
       list: [
         { type: "h2",content: "def",updated: ""},
         { type: "p",content: "abc",updated: "" },
@@ -77,7 +99,11 @@ export default {
     }
   },
   methods:{
-    doUpdate(e,index){
+    doUpdate(e,index,meta){
+      if(meta){
+        this.meta[index].updated = e.target.innerHTML
+        return;
+      }
       this.list[index].updated = e.target.innerHTML
     },
     doAdd(){
@@ -97,7 +123,15 @@ export default {
     },
     doSave(){
 
-      const formData = [...this.list].reduce((acc,item,index) => {
+      let formData = new FormData();
+
+      const meta = this.meta;
+      formData = Object.keys(meta).reduce((acc,key,index) => {
+        acc.append(key,meta[key].updated || meta[key].content);
+        return acc;
+      },formData);
+
+      formData = [...this.list].reduce((acc,item,index) => {
         if(item.type !== "image"){
           acc.append(`${item.type}_${index}`,item.updated || item.content)
         } else {
@@ -110,7 +144,7 @@ export default {
           }
         }
         return acc;
-      },new FormData());
+      },formData);
 
 
       const config = {headers: {'content-type': 'multipart/form-data'}}
@@ -191,6 +225,9 @@ export default {
       &:focus{
         outline: none;
       }
+    }
+    &__title{
+      font-weight: bold;
     }
     &--image{
       display: flex;
