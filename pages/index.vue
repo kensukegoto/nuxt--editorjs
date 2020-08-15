@@ -2,7 +2,7 @@
   <section class="editor">
 
     <form @submit.prevent="doSave">
-      <div class="item editor__header">
+      <div class="item editor__head">
         <div class="item__header">
           <p class="item__header__title">meta</p>
         </div>
@@ -13,16 +13,12 @@
             :content="meta.title.content"
             type="h1"
             />
-        </div>
-        <div class="item__body">
           <p class="item__body__title">ディスクリプション</p>
           <TextArea
             @doUpdate="e => {doUpdate(e,'description',true)}" 
             :content="meta.description.content"
             type="p"
             />
-        </div>
-        <div class="item__body">
           <p class="item__body__title">日付</p>
           <div>
             <DatePicker
@@ -33,17 +29,11 @@
         </div>
         <div class="item__body">
           <p class="item__body__title">サムネイル</p>
-          <div class="item__body--image">
-            <figure>
-              <img :src="meta.imgPath.content || '/image/noimage.png'" alt="">
-            </figure>
-            <div class="upload">
-              <p>
-                <input type="file" name="image_imgPath" @change="e => addPreview(e,'imgPath',true)">
-                <span>ファイルを選択して下さい</span>
-              </p>
-            </div>
-          </div>
+          <ImageArea 
+            class="item__body--image"
+            @doUpdateImage="e => {doUpdateImage(e,'imgPath',true)}"
+            :content="meta.imgPath.content"
+          />
         </div>
       </div>
 
@@ -60,17 +50,11 @@
             :content="item.content"
             :type="item.type"
             />
-          <div v-if="item.type === 'image'" class="item__body item__body--image">
-            <figure>
-              <img :src="item.content || '/image/noimage.png'" alt="">
-            </figure>
-            <div class="upload">
-              <p>
-                <input type="file" :data-index="index" :name="'image_' + index" @change="e => {addPreview(e,index)}">
-                <span>ファイルを選択して下さい</span>
-              </p>
-            </div>
-          </div>
+          <ImageArea v-if="item.type === 'image'"
+            class="item__body--image"
+            @doUpdateImage="e => {doUpdateImage(e,index)}"
+            :content="item.content"
+          />
         </li>
       </draggable>
       
@@ -98,17 +82,19 @@ import DatePicker from 'vuejs-datepicker/src/components/Datepicker.vue';
 import {ja} from 'vuejs-datepicker/dist/locale'
 
 import TextArea from '~/components/TextArea'
+import ImageArea from '~/components/ImageArea'
 
 const type2name = new Map([
   ["h2","中タイトル"],
   ["p","テキスト"],
-  ["image","画像"],
+  ["image","画像"]
 ])
 export default {
   components:{
     draggable,
     DatePicker,
-    TextArea
+    TextArea,
+    ImageArea
   },
   data(){
     return {
@@ -133,7 +119,7 @@ export default {
       list: [
         { type: "h2",content: "def",updated: ""},
         { type: "p",content: "abc",updated: "" },
-        { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
+        // { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
       ],
       selectedType: '',
       datePicker: {
@@ -151,9 +137,7 @@ export default {
     }
   },
   methods:{
-    yeah(e,test){
-      console.log(e,test)
-    },
+
     doUpdate(e,index,meta){
       if(meta){
         this.meta[index].updated = e;
@@ -161,6 +145,15 @@ export default {
       }
       this.list[index].updated = e.target || e
       console.log(this.list)
+    },
+    doUpdateImage(e,index,meta){
+      if(meta){
+        this.meta[index].content = e.base64;
+        this.meta[index].updated = e.file;
+        return;
+      }
+      this.list[index].content = e.base64;
+      this.list[index].updated = e.file;
     },
     doAdd(){
       const type = this.selectedType || "p";
@@ -223,36 +216,6 @@ export default {
 
 
     },
-    doSend(){
-      console.log("送るかも");
-    },
-    doBold(cmdId, param){
-      // 文字選択がdraggableのイベントで置き換わってるっぽい
-      document.execCommand('bold', false, param);
-    },
-    addPreview(e,index,meta){
-
-      let files = e.target.files || e.dataTransfer.files;
-      let reader = new FileReader();
-      if(meta){
-        reader.onload = (e) => {
-          this.meta[index].content = e.target.result;
-        };
-        reader.readAsDataURL(files[0]);
-        this.meta[index].updated = files[0]
-          return;
-      }
-      reader.onload = (e) => {
-        this.list[index].content = e.target.result;
-      };
-      reader.readAsDataURL(files[0]);
-      this.list[index].updated = files[0]
-    },
-    onPaste(e) {
-      e.preventDefault();
-      const text = e.clipboardData.getData("text/plain");
-      document.execCommand("insertHTML", false, text);
-    }
   }
 }
 </script>
@@ -263,13 +226,14 @@ export default {
   width: 800px;
   margin: 0 auto;
 
+  &__head{
+    background-color: #fff;
+  }
+
   &__body{
     margin-top: 24px;
   }
 
-  // &__item{
-  //   margin-top: 24px;
-  // }
 }
 
 .item{
@@ -294,57 +258,7 @@ export default {
       
     }
   }
-  &__body{
-    background: #fff;
-    padding: 8px;
-    h2,p{
-      min-height: 1em;
-    }
-    h2,p{
-      &:focus{
-        outline: none;
-      }
-    }
-    &__title{
-      font-weight: bold;
-    }
-    &--image{
-      display: flex;
-      flex-wrap: wrap;
-      figure{
-        width: 50%;
-        img{
-          max-width: 100%;
-        }
-      }
-      .upload {
-        width: 50%;
-        p{
-          position: relative;
-          height: 100px;
-          background: #efefef;
-          border-radius: 15px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          input{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            &:focus{
-              outline: none;
-            }
-          }
-        }
-        
 
-
-      }
-    }
-  }
 }
 
 

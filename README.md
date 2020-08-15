@@ -15,6 +15,7 @@ https://github.com/kensukegoto/multer--check-file-ext
 追加：サムネエリア
 追加：作成日時を登録できる
 変更：テキストエリアをコンポーネントにする
+変更：画像エリアをコンポーネントにする
 
 追加：データをJSONとして保存する
 追加：一覧用のJSONを作成する
