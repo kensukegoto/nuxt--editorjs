@@ -14,7 +14,7 @@
             <div><p contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
-            <div><p contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</p></div>
+            <div><h2 contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</h2></div>
           </div>
           <div v-if="item.type === 'image'" class="item__body item__body--image">
             <figure>
@@ -178,10 +178,10 @@ export default {
   &__body{
     background: #fff;
     padding: 8px;
-    p{
+    h2,p{
       min-height: 1em;
     }
-    div,p{
+    h2,p{
       &:focus{
         outline: none;
       }
