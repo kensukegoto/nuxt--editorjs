@@ -13,6 +13,20 @@
           <p class="item__body__title">ディスクリプション</p>
           <div><p contenteditable="true" @input="e => {doUpdate(e,'description',true)}" @paste="onPaste">{{ meta.description.content }}</p></div>
         </div>
+        <div class="item__body">
+          <p class="item__body__title">サムネイル</p>
+          <div class="item__body--image">
+            <figure>
+              <img :src="meta.imgPath.content || '/image/noimage.png'" alt="">
+            </figure>
+            <div class="upload">
+              <p>
+                <input type="file" name="image_imgPath" @change="e => addPreview(e,'imgPath',true)">
+                <span>ファイルを選択して下さい</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       <draggable tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
@@ -34,7 +48,7 @@
             </figure>
             <div class="upload">
               <p>
-                <input type="file" :data-index="index" :name="'image_' + index" @change="addPreview">
+                <input type="file" :data-index="index" :name="'image_' + index" @change="e => {addPreview(e,index)}">
                 <span>ファイルを選択して下さい</span>
               </p>
             </div>
@@ -80,6 +94,10 @@ export default {
         },
         description: {
           content: "【NHK】終戦から75年を迎えた15日、およそ310万人の戦没者を慰霊する政府主催の全国戦没者追悼式が東京の日本武道館で行われてい…",
+          updated: ""
+        },
+        imgPath: {
+          content: "",
           updated: ""
         }
       },
@@ -127,7 +145,18 @@ export default {
 
       const meta = this.meta;
       formData = Object.keys(meta).reduce((acc,key,index) => {
-        acc.append(key,meta[key].updated || meta[key].content);
+        const item = meta[key];
+        if(key !== "imgPath"){
+          acc.append(key,item.updated || item.content);
+        } else {
+          if(item.updated === ""){
+            acc.append(key, item.content)
+
+          } else {
+            acc.append(key, "")
+            acc.append("imgPath",item.updated)
+          }
+        }
         return acc;
       },formData);
 
@@ -163,10 +192,18 @@ export default {
       // 文字選択がdraggableのイベントで置き換わってるっぽい
       document.execCommand('bold', false, param);
     },
-    addPreview(e){
+    addPreview(e,index,meta){
+
       let files = e.target.files || e.dataTransfer.files;
-      const index = e.target.dataset["index"];
       let reader = new FileReader();
+      if(meta){
+        reader.onload = (e) => {
+          this.meta[index].content = e.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+        this.meta[index].updated = files[0]
+          return;
+      }
       reader.onload = (e) => {
         this.list[index].content = e.target.result;
       };

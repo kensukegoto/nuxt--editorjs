@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage
-}).array('files')
+}).fields([{name:'files'},{name:'imgPath'}])
 
 
 app.post('/create', (req, res) => {
@@ -57,19 +57,31 @@ app.post('/create', (req, res) => {
             const tag = k.split("_")[0]
             return { type : tag, content : body[k]}
           })
-          
-          for(let i = 0,l = res.req.files.length;i < l;i++){
-            const name = res.req.files[i].filename;
-            let flg = false;
+
+          if(res.req.files.imgPath && res.req.files.imgPath[0]) {
+            
             body = body.map( item => {
-              if(!flg && item.type.startsWith("image") && item.content === "") {
-                item.content = name;
-                flg = true;
+              if(item.type.startsWith("imgPath") && item.content === "") {
+                item.content = res.req.files.imgPath[0].filename;
               }
               return item;
             })
-            console.log(body)
           }
+          
+          if(res.req.files.files){
+            for(let i = 0,l = res.req.files.files.length;i < l;i++){
+              const name = res.req.files.files[i].filename;
+              let flg = false;
+              body = body.map( item => {
+                if(!flg && item.type.startsWith("image") && item.content === "") {
+                  item.content = name;
+                  flg = true;
+                }
+                return item;
+              })
+            }
+          }
+
 
           res.json({
               status: "sucess",
