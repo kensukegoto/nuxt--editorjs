@@ -14,6 +14,15 @@
           <div><p contenteditable="true" @input="e => {doUpdate(e,'description',true)}" @paste="onPaste">{{ meta.description.content }}</p></div>
         </div>
         <div class="item__body">
+          <p class="item__body__title">日付</p>
+          <div>
+            <DatePicker
+              v-model="meta.pubDate.content"
+              :format="datePicker.DatePickerFormat"
+              :language="datePicker.lang" />
+          </div>
+        </div>
+        <div class="item__body">
           <p class="item__body__title">サムネイル</p>
           <div class="item__body--image">
             <figure>
@@ -76,6 +85,9 @@
 
 <script>
 import draggable from 'vuedraggable'
+import DatePicker from 'vuejs-datepicker/src/components/Datepicker.vue';
+import {ja} from 'vuejs-datepicker/dist/locale'
+
 const type2name = new Map([
   ["h2","中見出し"],
   ["p","テキスト"],
@@ -83,7 +95,8 @@ const type2name = new Map([
 ])
 export default {
   components:{
-    draggable
+    draggable,
+    DatePicker
   },
   data(){
     return {
@@ -99,6 +112,10 @@ export default {
         imgPath: {
           content: "",
           updated: ""
+        },
+        pubDate: {
+          content:"",
+          updated: ""
         }
       },
       list: [
@@ -106,7 +123,12 @@ export default {
         { type: "p",content: "abc",updated: "" },
         { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
       ],
-      selectedType: ''
+      selectedType: '',
+      datePicker: {
+        default: new Date(),
+        DatePickerFormat: 'yyyy年MM月dd日',
+        lang: ja
+      }
     }
   },
   computed:{
