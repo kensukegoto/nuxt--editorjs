@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
 
       //　Math.random().toString(36).slice(-9)で乱数を生成
-      const imageName = `image/${Math.random().toString(36).slice(-9)}_${Date.now()}.jpg`;
+      const imageName = `/image/${Math.random().toString(36).slice(-9)}_${Date.now()}.jpg`;
       cb(null, imageName)
   }
 })
@@ -62,7 +62,7 @@ app.post('/create', (req, res) => {
           for(let i = 0,l = res.req.files.length;i < l;i++){
             const name = res.req.files[i].filename;
             body = body.map( item => {
-              if(item.type.startsWith("image")) item.content = name;
+              if(item.type.startsWith("image") && item.content === "") item.content = name;
               return item;
             })
           }

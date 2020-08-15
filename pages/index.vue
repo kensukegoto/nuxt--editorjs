@@ -18,7 +18,7 @@
           </div>
           <div v-if="item.type === 'image'" class="item__body item__body--image">
             <figure>
-              <img :src="item.content" alt="">
+              <img :src="item.content || '/image/noimage.png'" alt="">
             </figure>
             <div class="upload">
               <p>
@@ -64,7 +64,7 @@ export default {
       list: [
         { type: "h2",content: "def",updated: ""},
         { type: "p",content: "abc",updated: "" },
-        // { type: "image",content: "/image/nyanco_01.jpg" }
+        { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
       ],
       selectedType: ''
     }
@@ -85,10 +85,10 @@ export default {
       let item;
       switch(type){
         case "image":
-          item = { type,name: type2name.get(type), content:"/image/noimage.png" ,file:""};
+          item = { type,name: type2name.get(type), content:"" ,updated:""};
           break;
         default:
-          item = { type,name: type2name.get(type), content:"" };
+          item = { type,name: type2name.get(type), content:"", updated: "" };
       }
       this.list.push(item)
     },
@@ -101,11 +101,17 @@ export default {
         if(item.type !== "image"){
           acc.append(`${item.type}_${index}`,item.updated || item.content)
         } else {
-          acc.append(`${item.type}_${index}`,"")
-          acc.append("files",item.file)
+          if(item.updated === ""){
+            acc.append(`${item.type}_${index}`, item.content)
+
+          } else {
+            acc.append(`${item.type}_${index}`, "")
+            acc.append("files",item.updated)
+          }
         }
         return acc;
       },new FormData());
+
 
       const config = {headers: {'content-type': 'multipart/form-data'}}
 
@@ -131,7 +137,7 @@ export default {
         this.list[index].content = e.target.result;
       };
       reader.readAsDataURL(files[0]);
-      this.list[index].file = files[0]
+      this.list[index].updated = files[0]
     },
     onPaste(e) {
       e.preventDefault();
