@@ -48,6 +48,7 @@ export default {
   padding: 8px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 
   &__image{
     width: 50%;
@@ -56,7 +57,7 @@ export default {
     }
   }
   &__upload{
-    width: 50%;
+    width: calc(50% - 8px );
     p{
       position: relative;
       height: 100px;

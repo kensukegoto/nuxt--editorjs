@@ -2,33 +2,30 @@
   <section class="editor">
 
     <form @submit.prevent="doSave">
-      <div class="item editor__head">
-        <div class="item__header">
-          <p class="item__header__title">meta</p>
-        </div>
-        <div class="item__body">
-          <p class="item__body__title">タイトル</p>
+      <div class="editor__meta">
+        <ItemHeader
+          content="meta"
+        />
+        <div>
+          <p class="editor__meta__heading">タイトル</p>
           <TextArea
             @doUpdate="e => {doUpdate(e,'title',true)}" 
             :content="meta.title.content"
             type="h1"
             />
-          <p class="item__body__title">ディスクリプション</p>
+          <p class="editor__meta__heading">ディスクリプション</p>
           <TextArea
             @doUpdate="e => {doUpdate(e,'description',true)}" 
             :content="meta.description.content"
             type="p"
             />
-          <p class="item__body__title">日付</p>
-          <div>
-            <DatePicker
-              v-model="meta.pubDate.content"
-              :format="datePicker.DatePickerFormat"
-              :language="datePicker.lang" />
-          </div>
-        </div>
-        <div class="item__body">
-          <p class="item__body__title">サムネイル</p>
+          <p class="editor__meta__heading">日付</p>
+          <DatePicker
+            class="editor__meta__date"
+            v-model="meta.pubDate.content"
+            :format="datePicker.DatePickerFormat"
+            :language="datePicker.lang" />
+          <p class="editor__meta__heading">サムネイル</p>
           <ImageArea 
             class="item__body--image"
             @doUpdateImage="e => {doUpdateImage(e,'imgPath',true)}"
@@ -37,21 +34,20 @@
         </div>
       </div>
 
-      <draggable class="editor__body" tag="ul" ghost-class="item--draged" :list="list">
+      <draggable class="editor__body" tag="ul" ghost-class="draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
-        class="editor__item item">
-          <div class="item__header">
-            <p class="item__header__title">{{ typename(item.type) }}</p>
-            <a @click="doDelete(index)"><p>×</p></a>
-          </div>
+        class="editor__item">
+          <ItemHeader
+            :type="item.type"
+            @doDelete="doDelete(index)"
+          />
           <TextArea v-if="item.type === 'p' || item.type === 'h2'" 
             @doUpdate="e => {doUpdate(e,index)}" 
             :content="item.content"
             :type="item.type"
             />
           <ImageArea v-if="item.type === 'image'"
-            class="item__body--image"
             @doUpdateImage="e => {doUpdateImage(e,index)}"
             :content="item.content"
           />
@@ -83,18 +79,16 @@ import {ja} from 'vuejs-datepicker/dist/locale'
 
 import TextArea from '~/components/TextArea'
 import ImageArea from '~/components/ImageArea'
+import ItemHeader from '~/components/ItemHeader'
 
-const type2name = new Map([
-  ["h2","中タイトル"],
-  ["p","テキスト"],
-  ["image","画像"]
-])
+
 export default {
   components:{
     draggable,
     DatePicker,
     TextArea,
-    ImageArea
+    ImageArea,
+    ItemHeader
   },
   data(){
     return {
@@ -129,13 +123,7 @@ export default {
       }
     }
   },
-  computed:{
-    typename:()=>{
-      return (type)=>{
-        return type2name.get(type);
-      }
-    }
-  },
+
   methods:{
 
     doUpdate(e,index,meta){
@@ -160,10 +148,10 @@ export default {
       let item;
       switch(type){
         case "image":
-          item = { type,name: type2name.get(type), content:"" ,updated:""};
+          item = { type, content:"" ,updated:""};
           break;
         default:
-          item = { type,name: type2name.get(type), content:"", updated: "" };
+          item = { type, content:"", updated: "" };
       }
       this.list.push(item)
     },
@@ -220,48 +208,33 @@ export default {
 }
 </script>
 
+<style>
+.editor__meta__date input{
+  padding: 8px;
+}
+</style>
+
 <style lang="scss" scoped>
 .editor{
-
   width: 800px;
   margin: 0 auto;
-
-  &__head{
-    background-color: #fff;
-  }
-
-  &__body{
-    margin-top: 24px;
-  }
-
 }
-
-.item{
-
-  &--draged{
-    opacity: 0.5;
-  }
-
-  &__header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 24px;
-    background: #88684e;
-    color: #fff;
-    padding: 0 16px;
+ .editor__meta{
+  background-color: #fff;
+  &__heading{
+    margin: 8px 8px 0;
     font-weight: bold;
-    a{
-      display: block;
-      font-size: 20px;
-      cursor: pointer;
-      
-    }
   }
-
+  &__date{
+    margin: 8px 8px 0;
+  }
 }
-
-
+.editor__body{
+  margin-top: 24px;
+  .draged{
+    opacity: .5;
+  }
+}
 
 
 .add {
