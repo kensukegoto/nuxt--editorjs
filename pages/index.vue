@@ -53,21 +53,13 @@
           />
         </li>
       </draggable>
-      
-      <div class="add">
-        <p>
-          <select id="add__select" v-model="selectedType">
-            <option disabled value="">追加する要素を選択して下さい</option>
-            <option value="p">テキスト</option>
-            <option value="h2">中見出し</option>
-            <option value="image">画像</option>
-          </select>
-        </p>
-        <a @click="doAdd"><p>+</p></a>
-      </div>
-      <div class="save">
-        <a @click="doSave"><p>保存</p></a>
-      </div>
+
+      <ToolBox
+        class="editor__toolbox"
+        @doAdd="doAdd"
+        @doSave="doSave"
+      />
+
     </form>
   </section>
 </template>
@@ -80,6 +72,7 @@ import {ja} from 'vuejs-datepicker/dist/locale'
 import TextArea from '~/components/TextArea'
 import ImageArea from '~/components/ImageArea'
 import ItemHeader from '~/components/ItemHeader'
+import ToolBox from '~/components/ToolBox'
 
 
 export default {
@@ -88,7 +81,8 @@ export default {
     DatePicker,
     TextArea,
     ImageArea,
-    ItemHeader
+    ItemHeader,
+    ToolBox
   },
   data(){
     return {
@@ -115,7 +109,7 @@ export default {
         { type: "p",content: "abc",updated: "" },
         // { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
       ],
-      selectedType: '',
+
       datePicker: {
         default: new Date(),
         DatePickerFormat: 'yyyy年MM月dd日',
@@ -235,46 +229,9 @@ export default {
     opacity: .5;
   }
 }
-
-
-.add {
-
+.editor__toolbox {
   margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+}
 
-  select{
-    width: 400px;
-    height: 32px;
-  }
-  a{
-    display: inline-block;
-    p{
-      height: 32px;
-      width: 32px;
-      text-align: center;
-      font-size: 24px;
-      background: #88684e;
-      color: #fff;
-      // border-radius: 50%;
-    }
-  }
-}
-.save{
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  a {
-    cursor: pointer;
-    display: inline-block;
-    padding: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    background: #fff;
-    border: 1px solid #88684e;
-  }
-}
 
 </style>
