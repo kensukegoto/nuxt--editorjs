@@ -11,7 +11,7 @@
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div v-if="item.type === 'p'" class="item__body">
-            <div><p contenteditable="true" @input="doUpdate">{{ item.content }}</p></div>
+            <div><p contenteditable="true" @input="doUpdate" @paste="onPaste">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
             <div><p contenteditable="true" @input="doUpdate">{{ item.content }}</p></div>
@@ -132,6 +132,11 @@ export default {
       };
       reader.readAsDataURL(files[0]);
       this.list[index].file = files[0]
+    },
+    onPaste(e) {
+      e.preventDefault();
+      const text = e.clipboardData.getData("text/plain");
+      document.execCommand("insertHTML", false, text);
     }
   }
 }

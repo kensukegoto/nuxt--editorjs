@@ -6,6 +6,9 @@ https://github.com/kensukegoto/multer--check-file-ext
 # git
 
 ```
+# 8/15
+修正：コピペすると書式がくっつく問題
+
 # 8/14
 追加：画像を送信すると保存先のURLが返る
 追加：画像含めてフォームを処理し記事要素の配列を返す
