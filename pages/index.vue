@@ -1,17 +1,26 @@
 <template>
   <section class="editor">
+
     <form @submit.prevent="doSave">
-      <div class="item">
+      <div class="item editor__header">
         <div class="item__header">
-          <p class="item__header__title">記事タイトル</p>
+          <p class="item__header__title">meta</p>
         </div>
         <div class="item__body">
           <p class="item__body__title">タイトル</p>
-          <div><p contenteditable="true" @input="e => {doUpdate(e,'title',true)}" @paste="onPaste">{{ meta.title.content }}</p></div>
+          <TextArea
+            @doUpdate="e => {doUpdate(e,'title',true)}" 
+            :content="meta.title.content"
+            type="h1"
+            />
         </div>
         <div class="item__body">
           <p class="item__body__title">ディスクリプション</p>
-          <div><p contenteditable="true" @input="e => {doUpdate(e,'description',true)}" @paste="onPaste">{{ meta.description.content }}</p></div>
+          <TextArea
+            @doUpdate="e => {doUpdate(e,'description',true)}" 
+            :content="meta.description.content"
+            type="p"
+            />
         </div>
         <div class="item__body">
           <p class="item__body__title">日付</p>
@@ -37,7 +46,8 @@
           </div>
         </div>
       </div>
-      <draggable tag="ul" ghost-class="item--draged" :list="list">
+
+      <draggable class="editor__body" tag="ul" ghost-class="item--draged" :list="list">
         <li v-for="(item, index) of list" 
         :key="index" 
         class="editor__item item">
@@ -45,12 +55,11 @@
             <p class="item__header__title">{{ typename(item.type) }}</p>
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
-          <div v-if="item.type === 'p'" class="item__body">
-            <div><p contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</p></div>
-          </div>
-          <div v-if="item.type === 'h2'" class="item__body">
-            <div><h2 contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</h2></div>
-          </div>
+          <TextArea v-if="item.type === 'p' || item.type === 'h2'" 
+            @doUpdate="e => {doUpdate(e,index)}" 
+            :content="item.content"
+            :type="item.type"
+            />
           <div v-if="item.type === 'image'" class="item__body item__body--image">
             <figure>
               <img :src="item.content || '/image/noimage.png'" alt="">
@@ -88,15 +97,18 @@ import draggable from 'vuedraggable'
 import DatePicker from 'vuejs-datepicker/src/components/Datepicker.vue';
 import {ja} from 'vuejs-datepicker/dist/locale'
 
+import TextArea from '~/components/TextArea'
+
 const type2name = new Map([
-  ["h2","中見出し"],
+  ["h2","中タイトル"],
   ["p","テキスト"],
   ["image","画像"],
 ])
 export default {
   components:{
     draggable,
-    DatePicker
+    DatePicker,
+    TextArea
   },
   data(){
     return {
@@ -139,12 +151,16 @@ export default {
     }
   },
   methods:{
+    yeah(e,test){
+      console.log(e,test)
+    },
     doUpdate(e,index,meta){
       if(meta){
-        this.meta[index].updated = e.target.innerHTML
+        this.meta[index].updated = e;
         return;
       }
-      this.list[index].updated = e.target.innerHTML
+      this.list[index].updated = e.target || e
+      console.log(this.list)
     },
     doAdd(){
       const type = this.selectedType || "p";
@@ -247,9 +263,13 @@ export default {
   width: 800px;
   margin: 0 auto;
 
-  &__item{
+  &__body{
     margin-top: 24px;
   }
+
+  // &__item{
+  //   margin-top: 24px;
+  // }
 }
 
 .item{
