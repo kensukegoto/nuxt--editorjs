@@ -11,10 +11,10 @@
             <a @click="doDelete(index)"><p>×</p></a>
           </div>
           <div v-if="item.type === 'p'" class="item__body">
-            <div><p contenteditable="true" @input="doUpdate" @paste="onPaste">{{ item.content }}</p></div>
+            <div><p contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'h2'" class="item__body">
-            <div><p contenteditable="true" @input="doUpdate">{{ item.content }}</p></div>
+            <div><p contenteditable="true" @input="e => {doUpdate(e,index)}" @paste="onPaste">{{ item.content }}</p></div>
           </div>
           <div v-if="item.type === 'image'" class="item__body item__body--image">
             <figure>
@@ -62,8 +62,8 @@ export default {
   data(){
     return {
       list: [
-        { type: "h2",content: "def" },
-        { type: "p",content: "abc" },
+        { type: "h2",content: "def",updated: ""},
+        { type: "p",content: "abc",updated: "" },
         // { type: "image",content: "/image/nyanco_01.jpg" }
       ],
       selectedType: ''
@@ -77,8 +77,8 @@ export default {
     }
   },
   methods:{
-    doUpdate(e){
-      console.log(e.target)
+    doUpdate(e,index){
+      this.list[index].updated = e.target.innerHTML
     },
     doAdd(){
       const type = this.selectedType || "p";
@@ -99,7 +99,7 @@ export default {
 
       const formData = [...this.list].reduce((acc,item,index) => {
         if(item.type !== "image"){
-          acc.append(`${item.type}_${index}`,item.content)
+          acc.append(`${item.type}_${index}`,item.updated || item.content)
         } else {
           acc.append(`${item.type}_${index}`,"")
           acc.append("files",item.file)
