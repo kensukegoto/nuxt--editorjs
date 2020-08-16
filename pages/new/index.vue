@@ -86,34 +86,26 @@ export default {
   },
   data(){
 
-    const id = this.$route.params.id;
-    const data = require(`~/static/data/${id}.json`);
-
-    console.log(data)
- 
     return {
       meta: {
         title : {
-          content: data.title,
+          content: "",
           updated: ""
         },
         description: {
-          content: data.description,
+          content: "",
           updated: ""
         },
         imgPath: {
-          content: data.imgPath,
+          content: "",
           updated: ""
         },
         pubDate: {
-          content:data.pubDate,
+          content: "",
           updated: ""
         }
       },
-      list: data.body.map( item => {
-        item["updated"] = "";
-        return item
-      }),
+      list: [],
       datePicker: {
         default: new Date(),
         DatePickerFormat: 'yyyy年MM月dd日',
@@ -239,6 +231,7 @@ export default {
 .editor__toolbox {
   margin-top: 24px;
 }
+
 .newBtn{
   margin-top: 24px;
   margin-bottom: 24px;
@@ -253,5 +246,6 @@ export default {
   color: #333;
   border: 1px solid #aaa;
 }
+
 
 </style>

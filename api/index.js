@@ -120,7 +120,7 @@ app.post('/create', (req, res) => {
               description: res.req.body.description,
               pubDate: res.req.body.pubDate,
               link: `${filename}`,
-              imgPath: res.req.files.imgPath && res.req.files.imgPath[0] ? res.req.files.imgPath[0].filename : "/image/noimage.png"
+              imgPath: res.req.files.imgPath && res.req.files.imgPath[0] ? res.req.files.imgPath[0].filename : res.req.body.imgPath || "/image/noimage.png"
             };
 
             let list = JSON.parse(fs.readFileSync('./static/data/list.json', 'utf8'));
