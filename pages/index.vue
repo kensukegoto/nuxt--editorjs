@@ -148,6 +148,9 @@ export default {
     },
     doSave(){
 
+      console.log(this.list)
+      return;
+
       let formData = new FormData();
 
       const meta = this.meta;

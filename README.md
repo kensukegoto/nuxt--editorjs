@@ -2,7 +2,6 @@
 
 https://github.com/kensukegoto/multer--check-file-ext
 
-
 # git
 
 ```
@@ -20,6 +19,8 @@ https://github.com/kensukegoto/multer--check-file-ext
 変更：ツールボックスをコンポーネントにする
 変更：保存ボタンをコンポーネントにする
 追加：データをJSONとして保存する
+追加：記事のurlを登録しurlでJSONデータを作る
+修正：入力文字から改行以外のタグを除く
 
 追加：一覧用のJSONを作成する
 ---

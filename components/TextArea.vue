@@ -20,7 +20,13 @@ export default {
   },
   methods:{
     doUpdate(e){
-      const text = e.target.innerHTML;
+      const text =  e.target.innerHTML
+        .trim()
+        .replace(/<div><br>|<div>/g,"<br>")
+        .replace(/<\/div>/g,"")
+        .replace(/<span.*?>|<\/span>/g,"")
+        .replace(/(<br>)*$/,"")
+
       this.$emit("doUpdate",text);
     },
     doPaste(e){

@@ -52,6 +52,9 @@ app.post('/create', (req, res) => {
           let body = res.req.body;
           body = Object.keys(body).map(k => {
             const tag = k.split("_")[0]
+
+            
+
             return { type : tag, content : body[k]}
           })
 
@@ -79,6 +82,7 @@ app.post('/create', (req, res) => {
             }
           }
 
+
           const header = ["title","description","pubDate","imgPath","link"];
           const jsonData = body.reduce((acc,e) => {
             if(header.includes(e.type)) {
@@ -91,9 +95,48 @@ app.post('/create', (req, res) => {
             body:[]
           })
 
-          fs.writeFile('./static/data/hoge.json', JSON.stringify(jsonData),(err)=>{
+
+          const pubDate = new Date(res.req.body.pubDate)
+          const filename = `${pubDate.getFullYear()}${("00" + (pubDate.getMonth() + 1)).slice(-2)}${("00" + pubDate.getDate()).slice(-2)}`;
+
+    
+          if(pubDate.toString() === "Invalid Date") {
+            return res.json({
+              status: "fail",
+              message: "Invalid Date",
+              body: jsonData
+            })
+          }
+
+          fs.writeFile(`./static/data/${filename}.json`, JSON.stringify(jsonData),(err)=>{
             console.log(err)
           });
+
+
+          (()=>{
+
+            const data = {
+              title: res.req.body.title,
+              description: res.req.body.description,
+              pubDate: res.req.body.pubDate,
+              link: `${filename}`,
+              imgPath: res.req.files.imgPath && res.req.files.imgPath[0] ? res.req.files.imgPath[0].filename : "/image/noimage.png"
+            };
+
+            let list = JSON.parse(fs.readFileSync('./static/data/list.json', 'utf8'));
+            if(!Array.isArray(list)) list = [];
+
+            const index = list.findIndex(item => item.link.startsWith(filename))
+            if(index >= 0){
+              list.splice(index, 1, data);
+            } else {
+              list.unshift(data)
+            }
+            fs.writeFile(`./static/data/list.json`, JSON.stringify(list),(err)=>{
+              console.log(err)
+            });
+
+          })();
 
 
           res.json({
