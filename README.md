@@ -19,8 +19,8 @@ https://github.com/kensukegoto/multer--check-file-ext
 変更：スタイルを調整
 変更：ツールボックスをコンポーネントにする
 変更：保存ボタンをコンポーネントにする
-
 追加：データをJSONとして保存する
+
 追加：一覧用のJSONを作成する
 ---
 （確認）ニャンコで上記JSONが動く事を確認する

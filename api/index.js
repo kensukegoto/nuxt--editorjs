@@ -1,12 +1,9 @@
 const express = require("express");
 const multer = require("multer");
-// const bodyParser = require("body-parser");
 const fs = require('fs');
 
 const app = express()
 
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   // ファイルの保存先を指定(今回はsrc/public/image以下に画像を保存)
@@ -82,11 +79,27 @@ app.post('/create', (req, res) => {
             }
           }
 
+          const header = ["title","description","pubDate","imgPath","link"];
+          const jsonData = body.reduce((acc,e) => {
+            if(header.includes(e.type)) {
+              acc[e.type] = e.content
+              return acc
+            }
+            acc.body.push(e)
+            return acc;
+          },{
+            body:[]
+          })
+
+          fs.writeFile('./static/data/hoge.json', JSON.stringify(jsonData),(err)=>{
+            console.log(err)
+          });
+
 
           res.json({
               status: "sucess",
               // ファイル名を返す
-              body: body
+              body: jsonData
           })
       }
   })

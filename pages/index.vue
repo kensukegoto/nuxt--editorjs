@@ -56,7 +56,7 @@
 
       <ToolBox
         class="editor__toolbox"
-        @doAdd="doAdd"
+        @doAdd="type => doAdd(type)"
         @doSave="doSave"
       />
 
@@ -88,11 +88,11 @@ export default {
     return {
       meta: {
         title : {
-          content: "終戦から75年 全国戦没者追悼式 約310万人の戦没者を慰霊",
+          content: "",
           updated: ""
         },
         description: {
-          content: "【NHK】終戦から75年を迎えた15日、およそ310万人の戦没者を慰霊する政府主催の全国戦没者追悼式が東京の日本武道館で行われてい…",
+          content: "",
           updated: ""
         },
         imgPath: {
@@ -104,12 +104,7 @@ export default {
           updated: ""
         }
       },
-      list: [
-        { type: "h2",content: "def",updated: ""},
-        { type: "p",content: "abc",updated: "" },
-        // { type: "image",content: "/image/nyanco_01.jpg",updated: "" }
-      ],
-
+      list: [],
       datePicker: {
         default: new Date(),
         DatePickerFormat: 'yyyy年MM月dd日',
@@ -137,8 +132,7 @@ export default {
       this.list[index].content = e.base64;
       this.list[index].updated = e.file;
     },
-    doAdd(){
-      const type = this.selectedType || "p";
+    doAdd(type){
       let item;
       switch(type){
         case "image":

@@ -24,7 +24,7 @@ export default {
   },
   methods:{
     doAdd(){
-      this.$emit("doAdd")
+      this.$emit("doAdd",this.selectedType)
     },
     doSave(){
       this.$emit("doSave")
